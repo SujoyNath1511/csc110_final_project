@@ -1,0 +1,9 @@
+<OGRVRTDataSource>
+  <OGRVRTLayer name="annual-mean-sea-level-relative-to-land-19002013">
+    <SrcDataSource relativeToVRT="1">annual-mean-sea-level-relative-to-land-19002013.csv</SrcDataSource>
+    <FeatureCount>575</FeatureCount>
+    <Field name="year" src="year" type="String" />
+    <Field name="tide_gauge" src="tide_gauge" type="String" />
+    <Field name="mean_sea_level_metres" src="mean_sea_level_metres" type="String" />
+  </OGRVRTLayer>
+</OGRVRTDataSource>
