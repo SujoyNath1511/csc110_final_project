@@ -66,7 +66,7 @@ def get_frames(x_value: list, y_value: List[list], mode: List[str], indexes: Lis
     return frames
 
 
-def get_layout(frames: list, split_point: int, xrange: List[int], yrange: List[int]) -> go.Layout:
+def get_layout(frames: list, split_point: int, xrange: List[float], yrange: List[float]) -> go.Layout:
     """Return a go.Layout object, which can be passed to the attribute 'layout' of a go.Figure object.
        Through layout we can set interface arrangement and intersections for a graphic figure.
        The variable updatemenus in the function body is a list that can be passed to the attribute
@@ -82,7 +82,7 @@ def get_layout(frames: list, split_point: int, xrange: List[int], yrange: List[i
          - 'Temperature vs Time': to show the plot of temperature versus time.
          - 'Sea Level vs Time': to show the plot of sea level versus time.
        Three buttons:
-         - 'Clear': can be clicked to clear regression line(s) has been generated.
+         - 'Clear': can be clicked to clear regression line(s) that has been generated.
          - 'Analyze': can be clicked to show our animated regression line(s).
          - 'Predict': can be clicked to show our predicted data for future time, i.e. extended
                       regression line(s).
