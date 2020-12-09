@@ -103,14 +103,14 @@ def get_layout(frames: list, split_point: int, xrange: List[float], yrange: List
                         buttons=[dict(label='Analyze',  # show our animated regression line(s)
                                       method='animate',
                                       args=[frames[:split_point],
-                                            dict(frame=dict(duration=23,
+                                            dict(frame=dict(duration=20,
                                                             redraw=False),
                                                  transition=dict(duration=0))]
                                       ),
                                  dict(label='Predict',  # show predicted data for future time
                                       method='animate',
                                       args=[frames[split_point - 1:],
-                                            dict(frame=dict(duration=10,
+                                            dict(frame=dict(duration=8,
                                                             redraw=False),
                                                  transition=dict(duration=0))]
                                       ),
