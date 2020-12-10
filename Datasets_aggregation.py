@@ -10,8 +10,11 @@ please do so.
 I did not find it necessary to apply classes here.
 If you guys think it is better, feel free to tell me and I will re-edit
 """
-from typing import List, Tuple, Set, Any
+from typing import List, Dict
 import csv
+from dataclasses import dataclass
+# I made these two functions specifically for the datasets that Benjamin Suggested
+
 
 @dataclass
 class TempWaterInfo:
@@ -25,7 +28,7 @@ class TempWaterInfo:
     year: int
     temp: float
     sea_level: List[float]
-        
+
 
 def read_annual_mean_sea_level_new_zealand(filename: str, temp_info: Dict[int, TempWaterInfo]) -> None:
     """
@@ -37,9 +40,10 @@ def read_annual_mean_sea_level_new_zealand(filename: str, temp_info: Dict[int, T
         reader = csv.reader(file)
         next(reader)    # Skip the first row
         for row in reader:
-            if row[2] == 'no_data' or int(row[0]) not in temp_info:
+            if int(row[0]) not in temp_info:
                 continue
-
+            elif row[2] == 'no_data':
+                del temp_info[int(row[0])]
             else:
                 year = int(row[0])
                 water_level = float(row[2])
@@ -61,21 +65,5 @@ def read_global_temp_new_zealand(filename: str) -> Dict[int, TempWaterInfo]:
                 year = int(row[0])
                 temp = float(row[2])
                 data[year] = TempWaterInfo(year, temp, [])
-
-    return data
-
-def read_general_csv_files(filename: str) -> List[List[Any]]:
-    """
-    This function is a dummy version that reads the datasets "globl_temp" and "monthly_GMSL(the global sea levels)
-
-    This function returns a list of lists that contain the rows for the dataset excluding the first row
-    """
-    data = []
-    with open(filename) as file:
-        reader = csv.reader(file)
-        next(reader)    # Skip the first row
-
-        for row in reader:
-            data.append(row)
 
     return data
