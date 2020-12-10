@@ -22,8 +22,8 @@ def create_dataset() -> List[List[float]]:
     """Creates a random dataset for testing purposes.
     """
     time_column = list(range(1900, 2071))
-    sea_level_column = [random.uniform(-5.00, 5.00) for _ in range(0, 120)]
-    temperature_column = [random.uniform(-3, 5) for _ in range(0, 120)]
+    temperature_column = [random.uniform(-10, 10) + i * 1.8 for i in range(0, 120)]
+    sea_level_column = [random.uniform(-15, 15) + j * 1.5 for j in range(0, 120)]
 
     return [time_column, temperature_column, sea_level_column]
 
@@ -45,23 +45,26 @@ if __name__ == '__main__':
         [sl_temp_intercept + sl_temp_slope * predicted_temperature[i] for i in range(120, 171)]
 
     trace_temperature = get_trace_all_points(time[:120], temperature, mode='markers',
-                                             name='temperature')
+                                             name='temperature', color='#636EFA')
     trace_sea_level = get_trace_all_points(time[:120], sea_level, mode='markers',
-                                           name='sea level')
+                                           name='sea level', color='#00CC96')
     trace_predicted_temp = get_trace_first_point(time, predicted_temperature, mode='lines',
-                                                 name='predicted temperature')
+                                                 name='predicted temperature', color='#EF553B')
     trace_predicted_sl = get_trace_first_point(time, predicted_sea_level, mode='lines',
-                                               name='predicted sea level')
+                                               name='predicted sea level', color='#AB63FA')
 
     frames = get_frames(time, [predicted_temperature, predicted_sea_level],
                         mode=['lines', 'lines'], indexes=[1, 3])
 
-    layout = get_layout(frames, len(temperature), xrange=[1900, 2070], yrange=[-10, 10])
-
+    layout = get_layout(frames, len(temperature), xrange=[1900, 2070],
+                        yrange1=[min(predicted_temperature) - 10,
+                                 max(predicted_temperature) + 10],
+                        yrange2=[min(predicted_sea_level) - 10,
+                                 max(predicted_sea_level) + 10])
     line_chart = go.Figure(
         data=[trace_temperature, trace_predicted_temp, trace_sea_level, trace_predicted_sl],
         frames=frames,
         layout=layout
     )
-
+    line_chart.update_traces(visible='legendonly')
     line_chart.show()
