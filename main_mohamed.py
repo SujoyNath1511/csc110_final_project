@@ -33,6 +33,7 @@ if __name__ == '__main__':
     time = data_for_region['Auckland_MSL'].year
     sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_level]
 
+
     Auckland = data_for_region['Auckland_MSL']
     Wellington = data_for_region['Wellington']
     Dunedin = data_for_region['Dunedin_MSL']
@@ -47,26 +48,37 @@ if __name__ == '__main__':
         forecast=True,
         forecast_end_time=max(time) + 40)
 
+    # Version 1
+    # Using a for loop to implement one_predictor_linear_regression and append the tuples into the list
+    one_predictor_linear_reg = []
+    for region in data_for_region:
+        one_predictor_linear_reg.append(one_predictor_linear_regression(
+            predictor=data_for_region[region].temp, response=data_for_region[region].sea_level, forecast=True,
+            forecast_end_time=round(max(data_for_region[region].temp)) + round(max(pred_temp))))
+
+    # Version 2
+    # Using Variables which leads to more clarity in code
+
     # Linear regression for each city sea_level vs temperature
-    Auckland_lin_reg = one_predictor_linear_regression(
-        predictor=Auckland.temp, response=Auckland.sea_level, forecast=True,
-        forecast_end_time=round(max(Auckland.temp)) + round(max(pred_temp)))
-
-    Wellington_lin_reg = one_predictor_linear_regression(
-        predictor=Wellington.temp, response=Wellington.sea_level, forecast=True,
-        forecast_end_time=round(max(Wellington.temp)) + round(max(pred_temp)))
-
-    Dunedin_lin_reg = one_predictor_linear_regression(
-        predictor=Dunedin.temp, response=Dunedin.sea_level, forecast=True,
-        forecast_end_time=round(max(Dunedin.temp)) + round(max(pred_temp)))
-
-    Lyttleton_lin_reg = one_predictor_linear_regression(
-        predictor=Lyttleton.temp, response=Lyttleton.sea_level, forecast=True,
-        forecast_end_time=round(max(Lyttleton.temp)) + round(max(pred_temp)))
-
-    New_Plymouth_lin_reg = one_predictor_linear_regression(
-        predictor=New_Plymouth.temp, response=New_Plymouth.sea_level, forecast=True,
-        forecast_end_time=round(max(New_Plymouth.temp)) + round(max(pred_temp)))
+    # Auckland_lin_reg = one_predictor_linear_regression(
+    #     predictor=Auckland.temp, response=Auckland.sea_level, forecast=True,
+    #     forecast_end_time=round(max(Auckland.temp)) + round(max(pred_temp)))
+    #
+    # Wellington_lin_reg = one_predictor_linear_regression(
+    #     predictor=Wellington.temp, response=Wellington.sea_level, forecast=True,
+    #     forecast_end_time=round(max(Wellington.temp)) + round(max(pred_temp)))
+    #
+    # Dunedin_lin_reg = one_predictor_linear_regression(
+    #     predictor=Dunedin.temp, response=Dunedin.sea_level, forecast=True,
+    #     forecast_end_time=round(max(Dunedin.temp)) + round(max(pred_temp)))
+    #
+    # Lyttleton_lin_reg = one_predictor_linear_regression(
+    #     predictor=Lyttleton.temp, response=Lyttleton.sea_level, forecast=True,
+    #     forecast_end_time=round(max(Lyttleton.temp)) + round(max(pred_temp)))
+    #
+    # New_Plymouth_lin_reg = one_predictor_linear_regression(
+    #     predictor=New_Plymouth.temp, response=New_Plymouth.sea_level, forecast=True,
+    #     forecast_end_time=round(max(New_Plymouth.temp)) + round(max(pred_temp)))
 
     pred_sl, temp2 = one_predictor_linear_regression(
         predictor=temperature, response=sea_level, forecast=True,
@@ -78,33 +90,37 @@ if __name__ == '__main__':
     # For Auckland
     Auckland_trace_sl_vs_temp = get_trace_all_points(Auckland.temp, Auckland.sea_level, mode='markers',
                                                      name='Sea levels vs temperature in Auckland', color='orange')
-    Auckland_trace_linear_reg = get_trace_all_points(Auckland.temp, Auckland_lin_reg[0][:len(Auckland.temp)],
+    Auckland_trace_linear_reg = get_trace_all_points(Auckland.temp, one_predictor_linear_reg[0][0][:len(Auckland.temp)],
                                                      mode='lines', name='Auckland linear regression', color='orange')
 
     # For Wellington
     Wellington_trace_sl_vs_temp = get_trace_all_points(Wellington.temp, Wellington.sea_level, mode='markers',
                                                        name='Sea levels vs temperature in Wellington', color='blue')
-    Wellington_trace_linear_reg = get_trace_all_points(Wellington.temp, Wellington_lin_reg[0][:len(Wellington.temp)],
+    Wellington_trace_linear_reg = get_trace_all_points(Wellington.temp,
+                                                       one_predictor_linear_reg[1][0][:len(Wellington.temp)],
                                                        mode='lines', name='Wellington Line regression', color='blue')
+
     # For Dunedin
     Dunedin_trace_sl_vs_temp = get_trace_all_points(Dunedin.temp, Dunedin.sea_level, mode='markers',
-                                                       name='Sea levels vs temperature for Dunedin',
-                                                       color='red')
-    Dunedin_trace_linear_reg = get_trace_all_points(Dunedin.temp, Dunedin_lin_reg[0][:len(Dunedin.temp)], mode='lines',
-                                                       name='Dunedin Line regression', color='red')
+                                                    name='Sea levels vs temperature for Dunedin',
+                                                    color='red')
+    Dunedin_trace_linear_reg = get_trace_all_points(Dunedin.temp, one_predictor_linear_reg[2][0][:len(Dunedin.temp)],
+                                                    mode='lines',
+                                                    name='Dunedin Line regression', color='red')
 
     # For Lyttleton
     Lyttleton_trace_sl_vs_temp = get_trace_all_points(Lyttleton.temp, Lyttleton.sea_level, mode='markers',
                                                       name='Sea levels vs Temperatures in Lyttleton', color='green')
-    Lyttleton_trace_linear_reg = get_trace_all_points(Lyttleton.temp, Lyttleton_lin_reg[0][:len(Lyttleton.temp)],
+    Lyttleton_trace_linear_reg = get_trace_all_points(Lyttleton.temp,
+                                                      one_predictor_linear_reg[3][0][:len(Lyttleton.temp)],
                                                       mode='lines', name='Lyttleton Line regression', color='green')
 
     # For New_Plymouth
     New_Plymouth_trace_sl_vs_temp = get_trace_all_points(New_Plymouth.temp, New_Plymouth.sea_level, mode='markers',
                                                          name='Sea levels vs Temperatures in New Plymouth',
                                                          color='black')
-
-    New_Plymouth_trace_linear_reg = get_trace_all_points(New_Plymouth.temp, New_Plymouth_lin_reg[0][:len(New_Plymouth.temp)],
+    New_Plymouth_trace_linear_reg = get_trace_all_points(New_Plymouth.temp,
+                                                         one_predictor_linear_reg[4][0][:len(New_Plymouth.temp)],
                                                          mode='lines',
                                                          name='New Ploymouth linear regression', color='black')
 
@@ -131,6 +147,7 @@ if __name__ == '__main__':
                                 [min(sea_level) * 0.95, max(sea_level) * 1.05]])
 
     line_chart = go.Figure(
+        # Plug in the traces and the linear regressions lines for the 5 cities
         data=[Auckland_trace_sl_vs_temp, Wellington_trace_sl_vs_temp, Dunedin_trace_sl_vs_temp,
               Lyttleton_trace_sl_vs_temp, New_Plymouth_trace_sl_vs_temp, Auckland_trace_linear_reg,
               Wellington_trace_linear_reg, Dunedin_trace_linear_reg, Lyttleton_trace_linear_reg,
@@ -138,18 +155,12 @@ if __name__ == '__main__':
         frames=frames,
         layout=layout
     )
-
+    
     # update traces so that the traces of regression models are the only visible traces at the beginning
     for title in ['temperature', 'predicted temperature', 'sea level', 'predicted sea level']:
         line_chart.update_traces(visible=False, selector=dict(name=title))
 
-    # display the figure
-    # app = dash.Dash(__name__)
-    #
-    # app.layout = html.Div([
-    #     dcc.Graph(id="graph", figure=line_chart),
-    # ])
-    #
-    # app.run_server(debug=True)
+    # Use this if it works for you
+    # line_chart.show()
+
     line_chart.show(renderer='browser')
-    # pio.renderers.default = "browser"
