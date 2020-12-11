@@ -24,15 +24,14 @@ class TempWaterInfo:
     - year: The year that the data was recorded for
     - temp: The mean temperature for that given year
     - sea_level: The average sea level for that given year in meters in different places
-    - location: The location where the temperature was located
     """
-    year: int
-    temp: float
-    sea_level: float
+    year: List[int]
+    temp: List[float]
+    sea_level: List[float]
 
 
 def read_annual_mean_sea_level_new_zealand(filename: str, temp_info: Dict[int, float])\
-        -> Dict[str, List[TempWaterInfo]]:
+        -> Dict[str, TempWaterInfo]:
     """
     This function reads the csv file that stores the mean sea level relative to the land in New Zealand
 
@@ -47,9 +46,11 @@ def read_annual_mean_sea_level_new_zealand(filename: str, temp_info: Dict[int, f
             if row[2] == 'no_data' or year not in temp_info:
                 continue
             elif row[1] in dict_so_far:
-                dict_so_far[row[1]].append(TempWaterInfo(year, temp_info[year], float(row[2])))
+                dict_so_far[row[1]].year.append(year)
+                dict_so_far[row[1]].temp.append(temp_info[year])
+                dict_so_far[row[1]].sea_level.append(float(row[2]))
             else:
-                dict_so_far[row[1]] = [TempWaterInfo(year, temp_info[year], float(row[2]))]
+                dict_so_far[row[1]] = TempWaterInfo([year], [temp_info[year]], [float(row[2])])
 
     return dict_so_far
 
