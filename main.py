@@ -21,20 +21,23 @@ from Datasets_aggregation import read_annual_mean_sea_level_new_zealand, read_gl
 
 
 if __name__ == '__main__':
-    dict_info = read_global_temp_new_zealand(
+    temp_info = read_global_temp_new_zealand(
         'mfe-global-and-new-zealand-temperatures-five-year-running-averag-CSV/'
         'global-and-new-zealand-temperatures-five-year-running-averag.csv')
-    read_annual_mean_sea_level_new_zealand(
+    data_for_region = read_annual_mean_sea_level_new_zealand(
         'mfe-annual-mean-sea-level-relative-to-land-19002013-CSV/'
         'annual-mean-sea-level-relative-to-land-19002013.csv',
-        dict_info)
-    
-    time = [year for year in dict_info]
+        temp_info)
+    time = []
+    temperature = []
+    sea_level = []
+    for location in data_for_region:
+        for sea_temp_data in data_for_region[location]:
+            time.append(sea_temp_data.year)
+            temperature.append(sea_temp_data.temp)
+            sea_level.append(sea_temp_data.sea_level)
     max_time = max(time)
     time2 = [i + max_time for i in range(1, 41)]
-    temperature = [dict_info[year].temp for year in time]
-    sea_level = [statistics.mean(dict_info[year].sea_level) for year in time]
-    
     # Predicted outcome is the list that would be the line of best fit.
     # Predicted temperature depends on time, and predicted sea level depends on predicted temperature.
     temp_time_intercept, temp_time_slope = one_pred_reg_cofficients(time, temperature)
