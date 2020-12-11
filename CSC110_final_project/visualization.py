@@ -149,7 +149,7 @@ def get_layout(frames: list, split_point: int, xrange: List[List[float]], yrange
                         buttons=[dict(label='Analyze',  # show our animated regression line(s)
                                       method='animate',
                                       args=[frames[:split_point],
-                                            dict(frame=dict(duration=15,
+                                            dict(frame=dict(duration=13,
                                                             redraw=False),
                                                  transition=dict(duration=0)
                                                  )
