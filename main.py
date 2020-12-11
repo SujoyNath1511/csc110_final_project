@@ -28,40 +28,60 @@ if __name__ == '__main__':
         'mfe-annual-mean-sea-level-relative-to-land-19002013-CSV/'
         'annual-mean-sea-level-relative-to-land-19002013.csv',
         dict_info)
+    
     time = [year for year in dict_info]
-    temperature = [dict_info[year].temp for year in time]
-    sea_level = [statistics.mean(dict_info[year].sea_level) for year in time]
     max_time = max(time)
     time2 = [i + max_time for i in range(1, 41)]
+    temperature = [dict_info[year].temp for year in time]
+    sea_level = [statistics.mean(dict_info[year].sea_level) for year in time]
+    
     # Predicted outcome is the list that would be the line of best fit.
     # Predicted temperature depends on time, and predicted sea level depends on predicted temperature.
     temp_time_intercept, temp_time_slope = one_pred_reg_cofficients(time, temperature)
-    predicted_temperature = one_predictor_linear_regression(time, temperature) + \
+    pred_temp = one_predictor_linear_regression(time, temperature) + \
         [temp_time_intercept + temp_time_slope * i for i in time2]
     sl_temp_intercept, sl_temp_slope = one_pred_reg_cofficients(temperature, sea_level)
-    predicted_sea_level = one_predictor_linear_regression(temperature, sea_level) + \
-        [sl_temp_intercept + sl_temp_slope * predicted_temperature[i] for i in range(len(time), len(time) + 40)]
-    trace_temperature = get_trace_all_points(time, temperature, mode='markers',
-                                             name='temperature', color='#636EFA')
-    trace_sea_level = get_trace_all_points(time, sea_level, mode='markers',
-                                           name='sea level', color='#00CC96')
-    trace_predicted_temp = get_trace_first_point(time + time2, predicted_temperature, mode='lines',
-                                                 name='predicted temperature', color='#EF553B')
-    trace_predicted_sl = get_trace_first_point(time + time2, predicted_sea_level, mode='lines',
-                                               name='predicted sea level', color='#AB63FA')
+    pred_sl = one_predictor_linear_regression(temperature, sea_level) + \
+        [sl_temp_intercept + sl_temp_slope * pred_temp[i] for i in range(len(time), len(time) + 40)]
+    
+    # visualization part
+    # get traces for temperature-sea level data and regression lines
+    trace_sl_vs_temp = get_trace_all_points(temperature, sea_level, mode='markers', name='sl vs temp', color='orange')
+    trace_linear_reg = get_trace_all_points(temperature, pred_sl[:len(temperature)], mode='lines',
+                                            name='linear regression', color='orange')
+    
+    # get traces for temperature/sea level versus time data
+    trace_temp = get_trace_all_points(time, temperature, mode='markers',
+                                      name='temperature', color='#636EFA')
+    trace_sl = get_trace_all_points(time, sea_level, mode='markers',
+                                    name='sea level', color='#00CC96')
+    trace_pred_temp = get_trace_first_point(time + time2, pred_temp, mode='lines',
+                                            name='predicted temperature', color='#EF553B')
+    trace_pred_sl = get_trace_first_point(time + time2, pred_sl, mode='lines',
+                                          name='predicted sea level', color='#AB63FA')
 
-    frames = get_frames(time + time2, [predicted_temperature, predicted_sea_level],
-                        mode=['lines', 'lines'], indexes=[1, 3])
-
-    layout = get_layout(frames, len(temperature), xrange=[min(time), max_time + 40],
-                        yrange1=[min(predicted_temperature) * .9,
-                                 max(predicted_temperature) * 1.1],
-                        yrange2=[min(predicted_sea_level) * .9,
-                                 max(predicted_sea_level) * 1.1])
-    line_chart = go.Figure(
-        data=[trace_temperature, trace_predicted_temp, trace_sea_level, trace_predicted_sl],
+    # get frames for line chart animation
+    frames = get_frames(time + time2, [pred_temp, pred_sl],
+                        mode=['lines', 'lines'], indexes=[3, 5])
+    
+    # get layout for setting interface
+    layout = get_layout(frames, len(temperature),
+                        xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
+                                [min(time) - 5, max_time + 45]],
+                        yrange=[[min(sea_level) * 0.95, max(sea_level) * 1.05],
+                                [min(temperature) * 0.95, max(temperature) * 1.05],
+                                [min(sea_level) * 0.95, max(sea_level) * 1.05]])
+    
+    # generate the graphic object
+   line_chart = go.Figure(
+        data=[trace_sl_vs_temp, trace_linear_reg, trace_temp, trace_pred_temp, trace_sl, trace_pred_sl],
         frames=frames,
         layout=layout
     )
-    line_chart.update_traces(visible='legendonly')
+
+    # update traces so that the traces of regression models are the only visible traces at the beginning
+    for title in ['temperature', 'predicted temperature', 'sea level', 'predicted sea level']:
+        line_chart.update_traces(visible=False, selector=dict(name=title))
+
+    # display the figure
     line_chart.show()
