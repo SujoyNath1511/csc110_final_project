@@ -114,13 +114,14 @@ if __name__ == '__main__':
         layout=layout
     )
 
-    # update traces so that the traces of regression models are the only visible traces at the beginning
+    # update traces so that the traces of sea levels versus temperature are the only visible traces at
+    # the beginning
+    for title in {'Temperature', 'Predicted Temperature'}:
+        line_chart.update_traces(visible=False, selector=dict(name=title))
     for location in data_for_region:
         for title in {'Sea Levels in ' + location.rstrip('_MSL'),
                       'Predicted Sea Levels in ' + location.rstrip('_MSL')}:
             line_chart.update_traces(visible=False, selector=dict(name=title))
-    for title in {'Temperature', 'Predicted Temperature'}:
-        line_chart.update_traces(visible=False, selector=dict(name=title))
 
     # display the figure
     line_chart.show()
