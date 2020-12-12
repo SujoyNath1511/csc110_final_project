@@ -39,7 +39,7 @@ def get_trace_all_points(x_value: list, y_value: list, mode: str, name: str, col
                        (mode[:-1] + '_color'): color})
 
 
-def get_frames(x_value: list, y_value: List[list], mode: List[str], indexes: List[int]) -> list:
+def get_frames(x_value: list, y_value: List[list], indexes: List[int]) -> list:
     """ Return a list of dictionaries that each of them is a frame. The k-th frame contains data
         points from the first one to the (k - 1)-th one, where k is between 1 and len(x_value),
         inclusive.
@@ -58,7 +58,7 @@ def get_frames(x_value: list, y_value: List[list], mode: List[str], indexes: Lis
     for k in range(1, len(x_value) + 1):
         frame_so_far = dict(data=[go.Scatter(x=x_value[:k],
                                              y=y_value[i][:k],
-                                             mode=mode[i])
+                                             mode='lines')
                                   for i in range(0, len(y_value))],
                             traces=indexes
                             )

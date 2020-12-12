@@ -48,8 +48,6 @@ if __name__ == '__main__':
 
     traces_so_far = [trace_temp, trace_pred_temp]
 
-    frames_so_far = []
-    frames = []
     visible = {'Temperature vs Sea Level': [False, False],
                'Temperature vs Time': [True, True],
                'Sea Level vs Time': [False, False]}
@@ -91,25 +89,13 @@ if __name__ == '__main__':
         visible['Temperature vs Sea Level'].extend([True, True, False, False])
         visible['Temperature vs Time'].extend([False, False, False, False])
         visible['Sea Level vs Time'].extend([False, False, True, True])
-        # traces_so_far.extend([trace_sl_vs_temp, trace_sl])
-        # traces_so_far.append(trace_sl_vs_temp)
-        # traces_so_far.append(trace_linear_reg)
-        # traces_so_far.append(trace_sl)
-        # traces_so_far.append(trace_pred_sl)
-
-        # # get frames for line chart animation
-        # frames = get_frames(time2, [pred_temp, pred_sl],
-        #                     mode=['lines', 'lines'], indexes=[3, 5])
-
-        # frames_so_far.extend(frames)
 
     # get frames for line chart animation
-    frames = get_frames(time2, [pred_temp, pred_sl],
-                        mode=['lines', 'lines'], indexes=[3, 5])
+    frames = get_frames(time2, [pred_temp], indexes=[1])
 
     # get layout for setting interface
     sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_level]
-    layout = get_layout(frames_so_far, len(temperature),
+    layout = get_layout(frames, len(temperature),
                         xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
                                 [min(time2) - 5, max(time2) + 5]],
                         yrange=[[min(sea_level) * 0.95, max(sea_level) * 1.05],
@@ -129,27 +115,3 @@ if __name__ == '__main__':
 
     # display the figure
     line_chart.show()
-
-    # # get frames for line chart animation
-    # frames = get_frames(time2, [pred_temp, pred_sl],
-    #                     mode=['lines', 'lines'], indexes=[3, 5])
-    #
-    # # get layout for setting interface
-    # layout = get_layout(frames, len(temperature),
-    #                     xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
-    #                             [min(time2) - 5, max(time2) + 5]],
-    #                     yrange=[[min(sea_level) * 0.95, max(sea_level) * 1.05],
-    #                             [min(temperature) * 0.95, max(temperature) * 1.05],
-    #                             [min(sea_level) * 0.95, max(sea_level) * 1.05]])
-    # line_chart = go.Figure(
-    #     data=[trace_sl_vs_temp, trace_linear_reg, trace_temp, trace_pred_temp, trace_sl, trace_pred_sl],
-    #     frames=frames,
-    #     layout=layout
-    # )
-    #
-    # # update traces so that the traces of regression models are the only visible traces at the beginning
-    # for title in ['temperature', 'predicted temperature', 'sea level', 'predicted sea level']:
-    #     line_chart.update_traces(visible=False, selector=dict(name=title))
-    #
-    # # display the figure
-    # line_chart.show()
