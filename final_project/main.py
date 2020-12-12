@@ -55,9 +55,9 @@ if __name__ == '__main__':
               'New_Plymouth': 'brown'}
 
     for location in data_for_region:
-        temp = data_for_region[location].temp
-        sea_level = data_for_region[location].sea_level
-        year = data_for_region[location].year
+        temp = data_for_region[location].temps
+        sea_level = data_for_region[location].sea_levels
+        year = data_for_region[location].years
 
         # Create linear regression model of sea-level and temperature
         pred_sl, temp2 = one_predictor_linear_regression(
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     frames = get_frames(time2, [pred_temp, [None] * len(pred_temp)], indexes=[1, len(traces_so_far) - 1])
 
     # Get layout for setting interface
-    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_level]
+    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_levels]
     layout = get_layout(frames, len(temperature),
                         xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
                                 [min(time2) - 5, max(time2) + 5]],
