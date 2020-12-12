@@ -11,10 +11,9 @@ expressly prohibited. For more information on copyright for CSC110 materials,
 please consult our Course Syllabus.
 This file is Copyright (c) 2020 Sujoy Deb Nath, Yunjia Guo, Benjamin Lee and Mohamed Abdullahi.
 """
+
 from final_project.linear_regression_v2 import *
 from final_project.visualization import *
-import random
-from typing import List, Dict
 from final_project.Datasets_aggregation import *
 
 if __name__ == '__main__':
@@ -41,9 +40,9 @@ if __name__ == '__main__':
 
     # Creates the Scatter objects for the time and temperature
     trace_temp = get_trace_all_points(time, temperature, mode='markers',
-                                      name='temperature', color='#636EFA')
+                                      name='Temperature', color='blue')
     trace_pred_temp = get_trace_first_point(time2, pred_temp, mode='lines',
-                                            name='predicted temperature', color='#EF553B')
+                                            name='Predicted Temperature', color='red')
     # ---------------------------------------------------------------------------------------------
 
     traces_so_far = [trace_temp, trace_pred_temp]
@@ -51,6 +50,9 @@ if __name__ == '__main__':
     visible = {'Temperature vs Sea Level': [False, False],
                'Temperature vs Time': [True, True],
                'Sea Level vs Time': [False, False]}
+
+    colors = {'Auckland': 'orange', 'Wellington': 'blue', 'Dunedin': 'red', 'Lyttleton': 'green',
+              'New_Plymouth': 'brown'}
 
     for location in data_for_region:
         temp = data_for_region[location].temp
@@ -70,20 +72,23 @@ if __name__ == '__main__':
 
         # get traces for temperature-sea level data
         trace_sl_vs_temp = get_trace_all_points(temp, sea_level, mode='markers',
-                                                name='Sea Levels vs. Temperature in ' + location.strip('_MLS'),
-                                                color='orange')
+                                                name='Sea Levels vs Temperature in ' + location.rstrip('_MSL'),
+                                                color=colors[location.rstrip('_MSL')])
 
         # Scatterplot of the predicted temperature-sea level (regression line)
-        trace_linear_reg = get_trace_all_points(temp2, pred_sl, mode='lines',
-                                                name='linear regression', color='orange')
+        trace_linear_reg = get_trace_all_points(temp2[:len(temp)], pred_sl[:len(temp)], mode='lines',
+                                                name='Linear Regression Line for ' + location.rstrip('_MSL'),
+                                                color=colors[location.rstrip('_MSL')])
 
         # Scatterplot of sea level-time data
         trace_sl = get_trace_all_points(year, sea_level, mode='markers',
-                                        name='sea levels in ' + location.strip('_MLS'), color='#00CC96')
+                                        name='Sea Levels in ' + location.rstrip('_MSL'),
+                                        color=colors[location.rstrip('_MSL')])
 
         # Scatterplot of predicted sea level-time data (regression line)
         trace_pred_sl = get_trace_all_points(year2, pred_sl_2, mode='lines',
-                                              name='predicted sea level', color='#AB63FA')
+                                             name='Predicted Sea Levels in ' + location.rstrip('_MSL'),
+                                             color=colors[location.rstrip('_MSL')])
 
         traces_so_far.extend([trace_sl_vs_temp, trace_linear_reg, trace_sl, trace_pred_sl])
         visible['Temperature vs Sea Level'].extend([True, True, False, False])
@@ -98,9 +103,9 @@ if __name__ == '__main__':
     layout = get_layout(frames, len(temperature),
                         xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
                                 [min(time2) - 5, max(time2) + 5]],
-                        yrange=[[min(sea_level) * 0.95, max(sea_level) * 1.05],
+                        yrange=[[min(sea_level) * 0.85, max(sea_level) * 1.05],
                                 [min(temperature) * 0.95, max(temperature) * 1.05],
-                                [min(sea_level) * 0.95, max(sea_level) * 1.05]],
+                                [min(sea_level) * 0.85, max(sea_level) * 1.05]],
                         visible=visible)
 
     line_chart = go.Figure(
@@ -110,7 +115,11 @@ if __name__ == '__main__':
     )
 
     # update traces so that the traces of regression models are the only visible traces at the beginning
-    for title in ['temperature', 'predicted temperature', 'sea level', 'predicted sea level']:
+    for location in data_for_region:
+        for title in {'Sea Levels in ' + location.rstrip('_MSL'),
+                      'Predicted Sea Levels in ' + location.rstrip('_MSL')}:
+            line_chart.update_traces(visible=False, selector=dict(name=title))
+    for title in {'Temperature', 'Predicted Temperature'}:
         line_chart.update_traces(visible=False, selector=dict(name=title))
 
     # display the figure
