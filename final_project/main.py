@@ -38,7 +38,7 @@ if __name__ == '__main__':
         forecast=True,
         forecast_end_time=max(time) + 40)
 
-    # Creates the Scatter objects for the time and temperature
+    # Create the Scatter objects for the time and temperature
     trace_temp = get_trace_all_points(time, temperature, mode='markers',
                                       name='Temperature', color='blue')
     trace_pred_temp = get_trace_first_point(time2, pred_temp, mode='lines',
@@ -55,9 +55,9 @@ if __name__ == '__main__':
               'New_Plymouth': 'brown'}
 
     for location in data_for_region:
-        temp = data_for_region[location].temps
-        sea_level = data_for_region[location].sea_levels
-        year = data_for_region[location].years
+        temp = data_for_region[location].temp
+        sea_level = data_for_region[location].sea_level
+        year = data_for_region[location].year
 
         # Create linear regression model of sea-level and temperature
         pred_sl, temp2 = one_predictor_linear_regression(
@@ -68,9 +68,9 @@ if __name__ == '__main__':
         pred_sl_2, year2 = one_predictor_linear_regression(
             predictor=year, response=sea_level, forecast=True, forecast_end_time=max(time2))
 
-        # visualization part
+        # Visualization part
 
-        # get traces for temperature-sea level data
+        # Get traces for temperature-sea level data
         trace_sl_vs_temp = get_trace_all_points(temp, sea_level, mode='markers',
                                                 name='Sea Levels vs Temperature in ' + location.rstrip('_MSL'),
                                                 color=colors[location.rstrip('_MSL')])
@@ -95,11 +95,18 @@ if __name__ == '__main__':
         visible['Temperature vs Time'].extend([False, False, False, False])
         visible['Sea Level vs Time'].extend([False, False, True, True])
 
-    # get frames for line chart animation
-    frames = get_frames(time2, [pred_temp], indexes=[1])
+    # Add a new trace in which all values are None, so that every non-animated traces do not disappear
+    trace_none = get_trace_first_point([None], [None], 'lines', ' ', 'black')
+    trace_none.update(dict(showlegend=False))  # let the legend of this trace be invisible
+    traces_so_far.append(trace_none)
+    for option in visible:
+        visible[option].append(True)
 
-    # get layout for setting interface
-    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_levels]
+    # Get frames for line chart animation
+    frames = get_frames(time2, [pred_temp, [None] * len(pred_temp)], indexes=[1, len(traces_so_far) - 1])
+
+    # Get layout for setting interface
+    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_level]
     layout = get_layout(frames, len(temperature),
                         xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
                                 [min(time2) - 5, max(time2) + 5]],
@@ -114,7 +121,7 @@ if __name__ == '__main__':
         layout=layout
     )
 
-    # update traces so that the traces of sea levels versus temperature are the only visible traces at
+    # Update traces so that the traces of sea levels versus temperature are the only visible traces at
     # the beginning
     for title in {'Temperature', 'Predicted Temperature'}:
         line_chart.update_traces(visible=False, selector=dict(name=title))
@@ -123,5 +130,5 @@ if __name__ == '__main__':
                       'Predicted Sea Levels in ' + location.rstrip('_MSL')}:
             line_chart.update_traces(visible=False, selector=dict(name=title))
 
-    # display the figure
+    # Display the figure
     line_chart.show()
