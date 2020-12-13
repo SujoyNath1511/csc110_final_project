@@ -14,13 +14,13 @@ This file is Copyright (c) 2020 Sujoy Deb Nath, Yunjia Guo, Benjamin Lee and Moh
 
 from final_project.linear_regression_v2 import *
 from final_project.visualization import *
-from final_project.Datasets_aggregation import *
+from final_project.datasets_aggregation import *
 
 if __name__ == '__main__':
     temp_info = read_global_temp_new_zealand(
         'temp_new_zealand.csv')
 
-    data_for_region = read_annual_mean_sea_level_new_zealand(
+    data_for_region = read_mean_sea_level_new_zealand(
         'annual-mean-sea-level-relative-to-land-19002013.csv',
         temp_info)
 
