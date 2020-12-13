@@ -2,6 +2,8 @@
 Datasets Aggregations
 CSC110 Final Project
 
+This file performs data aggregation and filtration.
+
 
 Copyright and Usage Information
 ===============================
