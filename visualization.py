@@ -19,6 +19,7 @@ import plotly.graph_objects as go
 def get_trace_first_point(x_value: list, y_value: list, mode: str, name: str, color: str) \
         -> go.Scatter():
     """ Return a go.Scatter object that only includes the first (x, y) point of given data.
+    
     Set type (i.e. line or scatters) of the trace by the given string - mode.
     Set name, which will be shown in the legend, by the given string - name.
     Set color of the trace by the given string - color.
