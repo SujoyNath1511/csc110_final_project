@@ -1,9 +1,0 @@
-<OGRVRTDataSource>
-  <OGRVRTLayer name="global-and-new-zealand-temperatures-five-year-running-averag">
-    <SrcDataSource relativeToVRT="1">global-and-new-zealand-temperatures-five-year-running-averag.csv</SrcDataSource>
-    <FeatureCount>929</FeatureCount>
-    <Field name="Year" src="Year" type="String" />
-    <Field name="Data" src="Data" type="String" />
-    <Field name="Value" src="Value" type="String" />
-  </OGRVRTLayer>
-</OGRVRTDataSource>
