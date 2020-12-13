@@ -88,16 +88,19 @@ def read_mean_sea_level_new_zealand(filename: str, temp_info: Dict[int, float]) 
     return dict_so_far
 
 
-import python_ta
+if __name__ == '__main__':
+    import python_ta
 
-python_ta.check_all(config={
-    'max-line-length': 100,
-    'extra-imports': ['python_ta.contracts', 'dataclasses', 'csv', 'typing'],
-    'disable': ['R1705', 'C0200'],
-    'allowed-io': ['read_mean_sea_level_new_zealand', 'read_global_temp_new_zealand']
-})
+    python_ta.check_all(config={
+        'allowed-io': ['read_annual_mean_sea_level_new_zealand', 'read_global_temp_new_zealand'],
+        'extra-imports': ['python_ta.contracts', 'csv', 'dataclasses'],
+        'max-line-length': 100,
+        'max-args': 6,
+        'max-locals': 25,
+        'disable': ['R1705'],
+    })
 
-import python_ta.contracts
+    import python_ta.contracts
 
-python_ta.contracts.DEBUG_CONTRACTS = False
-python_ta.contracts.check_all_contracts()
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
