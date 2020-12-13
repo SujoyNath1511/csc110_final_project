@@ -1,6 +1,19 @@
 """
 Datasets Aggregations
 CSC110 Final Project
+
+This file performs data aggregation and filtration.
+
+
+Copyright and Usage Information
+===============================
+
+This file is provided solely for the personal and private use of students
+taking CSC110 at the University of Toronto St. George campus. All forms of
+distribution of this code, whether as given or with any changes, are
+expressly prohibited.
+
+This file is Copyright (c) 2020 Sujoy, Mohamed , Benjamin, Yunjia.
 """
 from typing import List, Dict
 import csv
