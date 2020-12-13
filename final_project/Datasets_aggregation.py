@@ -20,7 +20,7 @@ class TempWaterInfo:
                       years[i]
 
     Representation Invariant:
-        - len(self.year) == len(self.temp) == len(self.sea_level)
+        - len(self.years) == len(self.temps) == len(self.sea_levels)
     """
     years: List[int]
     temps: List[float]
