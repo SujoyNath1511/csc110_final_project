@@ -55,14 +55,14 @@ if __name__ == '__main__':
               'New_Plymouth': 'brown'}
 
     for location in data_for_region:
-        temp = data_for_region[location].temps
-        sea_level = data_for_region[location].sea_levels
-        year = data_for_region[location].years
+        temp = data_for_region[location].temp
+        sea_level = data_for_region[location].sea_level
+        year = data_for_region[location].year
 
         # Create linear regression model of sea-level and temperature
         pred_sl, temp2 = one_predictor_linear_regression(
             predictor=temp, response=sea_level, forecast=True,
-            forecast_end_time=round(max(temp)) + round(max(pred_temp)))
+            forecast_end_time=round(max(pred_temp)))
 
         # Create linear regression model of sea-level and time
         pred_sl_2, year2 = one_predictor_linear_regression(
@@ -76,7 +76,7 @@ if __name__ == '__main__':
                                                 color=colors[location.rstrip('_MSL')])
 
         # Scatterplot of the predicted temperature-sea level (regression line)
-        trace_linear_reg = get_trace_all_points(temp2[:len(temp)], pred_sl[:len(temp)], mode='lines',
+        trace_linear_reg = get_trace_all_points(temp2, pred_sl, mode='lines',
                                                 name='Linear Regression Line for ' + location.rstrip('_MSL'),
                                                 color=colors[location.rstrip('_MSL')])
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     frames = get_frames(time2, [pred_temp, [None] * len(pred_temp)], indexes=[1, len(traces_so_far) - 1])
 
     # Get layout for setting interface
-    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_levels]
+    sea_level = [sea_lvl for region in data_for_region for sea_lvl in data_for_region[region].sea_level]
     layout = get_layout(frames, len(temperature),
                         xrange=[[min(temperature) * 0.98, max(temperature) * 1.02],
                                 [min(time2) - 5, max(time2) + 5]],
